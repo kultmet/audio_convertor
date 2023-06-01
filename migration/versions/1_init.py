@@ -24,9 +24,9 @@ def upgrade() -> None:
     sa.Column('token', sa.UUID(), nullable=False),
     sa.PrimaryKeyConstraint('id')
     )
-    op.create_index(op.f('ix_users_id'), 'users', ['id'], unique=False)
+    op.create_index(op.f('ix_users_id'), 'users', ['id'], unique=True)
     op.create_index(op.f('ix_users_token'), 'users', ['token'], unique=True)
-    op.create_index(op.f('ix_users_username'), 'users', ['username'], unique=False)
+    op.create_index(op.f('ix_users_username'), 'users', ['username'], unique=True)
     op.create_table('audio',
     sa.Column('id', sa.UUID(), nullable=False),
     sa.Column('user', sa.UUID(), nullable=False),

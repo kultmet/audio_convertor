@@ -11,10 +11,11 @@ user: Table = Table(
         'id',
         UUID(as_uuid=True),
         primary_key=True,
+        unique=True,
         default=uuid4,
         index=True
     ),
-    Column('username', String(), index=True, nullable=False),
+    Column('username', String(), unique=True, index=True, nullable=False),
     Column(
         'token',
         UUID(as_uuid=True),
