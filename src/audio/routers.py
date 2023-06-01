@@ -1,34 +1,53 @@
-from typing import Annotated
 from uuid import UUID
-from fastapi import APIRouter, Depends, Form, UploadFile
-from sqlalchemy import insert, select
+
+from fastapi import APIRouter, Depends, Request, UploadFile
 from sqlalchemy.ext.asyncio import AsyncSession
+from fastapi.responses import FileResponse
 
-from database import get_async_session
+from src.database import get_async_session
 
-from audio.models import audio
-from audio.schemas import AudioRequest
-from audio.utils import wav_to_mp3
+from src.audio.schemas import AudioID, AudioPath
+from src.audio.utils import save, select_data, wav_to_mp3, check_authorization
 
 audio_router = APIRouter()
+
 
 @audio_router.post(
     '/audio/',
     tags=['Audio']
-    # response_model=UploadFile
 )
 async def converts_audio(
-    user_id: Annotated[UUID, Form()],
-    user_token: Annotated[UUID, Form()],
-    wav_file: UploadFile
+    request: Request,
+    user_id: UUID,
+    user_token: UUID,
+    wav_file: UploadFile,
+    db_session: AsyncSession = Depends(get_async_session)
 ):
-    wav_to_mp3(wav_file)
-    return 'fuck'# Нужно сформировать ссылу на эндпоинт следующей функции или как то по другому решить этот вопрос
+    """
+    For converts wav-audio file to mp3-audio file
+    and returns url for downloading result file.
+    """
+    await check_authorization(db_session, user_id, user_token)
+    path = await wav_to_mp3(wav_file)
+    await save(db_session, user_id, path)
+    song_id = await select_data(db_session, user_id, path)
+    return (
+        f'{request.url_for("upload_file")}'
+        f'?id={AudioID.from_orm(song_id).id}&user={user_id}'
+    )
 
 
 @audio_router.get(
-    '/audio/',
+    '/record',
     tags=['Audio'],
 )
-async def upload_file():
-    pass
+async def upload_file(
+    id: UUID,
+    user: UUID,
+    db_session: AsyncSession = Depends(get_async_session)
+):
+    """Downloading mp3-audio file."""
+    song_path = await select_data(
+        db_session=db_session, user_id=user, song_id=id
+    )
+    return FileResponse(path=AudioPath.from_orm(song_path).path)

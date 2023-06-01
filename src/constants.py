@@ -1,5 +1,6 @@
 import os
+from pathlib import Path
 
-MEDIA_ROOT = os.path.join('..', 'media')
+BASE_DIR = Path(__file__).resolve().parent.parent
 
-FFMPEG_PATH = 'C:/Users/kultm/AppData/Local/ffmpegio/ffmpeg-downloader/ffmpeg/bin/ffmpeg.exe'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
