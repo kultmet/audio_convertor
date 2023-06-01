@@ -1,3 +1,4 @@
+from typing import Annotated
 from uuid import UUID
 
 from fastapi import APIRouter, Depends, Request, UploadFile
@@ -8,6 +9,7 @@ from src.database import get_async_session
 
 from src.audio.schemas import AudioID, AudioPath
 from src.audio.utils import save, select_data, wav_to_mp3, check_authorization
+from src.users.utils import content_type_validation
 
 audio_router = APIRouter()
 
@@ -27,6 +29,7 @@ async def converts_audio(
     For converts wav-audio file to mp3-audio file
     and returns url for downloading result file.
     """
+    await content_type_validation(wav_file.content_type)
     await check_authorization(db_session, user_id, user_token)
     path = await wav_to_mp3(wav_file)
     await save(db_session, user_id, path)

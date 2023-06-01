@@ -20,3 +20,10 @@ async def save_user(db_session: AsyncSession, username: str):
 async def get_user(db_session: AsyncSession, username: str):
     query = select(user).where(user.c.username == username)
     return await db_session.execute(query)
+
+
+async def content_type_validation(content_type):
+    if content_type != 'audio/wav':
+        raise HTTPException(
+            400, 'Invalid content type. Можно только файлы в расширением wav!'
+        )
