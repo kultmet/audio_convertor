@@ -16,7 +16,8 @@ audio_router = APIRouter()
 
 @audio_router.post(
     '/audio/',
-    tags=['Audio']
+    tags=['Audio'],
+    status_code=201,
 )
 async def converts_audio(
     request: Request,
