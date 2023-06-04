@@ -11,13 +11,22 @@ Clone project from GitHub
 git clone https://github.com/kultmet/audio_convertor.git
 ```
 
-Deploying the project with <code>docker-compose</code>
-```
-first start: 
-docker-compose up -d --build
-__it is necessary that the 'web' image is built__
+Create .env file and fill enviroments
 
-next start:
+```
+touch .env
+echo "DB_NAME=postgres" >> .env
+echo "DB_USER=postgres" >> .env
+echo "DB_USER=postgres" >> .env
+echo "DB_PASSWORD=password" >> .env
+echo "DB_HOST=localhost" >> .env
+echo "DB_PORT=5432" >> .env
+echo "FFMPEG_PATH=/usr/bin/ffmpeg" >> .env
+```
+
+Deploying the project with <code>docker-compose</code>
+
+```
 docker-compose up -d
 ```
 ## Query examples:
