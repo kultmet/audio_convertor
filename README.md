@@ -15,6 +15,7 @@ Create .env file and fill enviroments
 
 ```
 # to terminal
+cd quiz/
 
 touch .env
 echo "DB_NAME=postgres" >> .env
