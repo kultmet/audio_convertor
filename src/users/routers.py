@@ -19,7 +19,8 @@ user_router = APIRouter()
     status_code=201,
 )
 async def create_user(
-    username: RequestUsername, session: AsyncSession = Depends(get_async_session)
+    username: RequestUsername,
+    session: AsyncSession = Depends(get_async_session)
 ):
     """Create user API View. Returns id and token for created user."""
     await save_user(session, username.dict()['username'])
