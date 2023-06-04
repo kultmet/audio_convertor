@@ -14,6 +14,8 @@ git clone https://github.com/kultmet/audio_convertor.git
 Create .env file and fill enviroments
 
 ```
+# to terminal
+
 touch .env
 echo "DB_NAME=postgres" >> .env
 echo "DB_USER=postgres" >> .env
@@ -22,6 +24,8 @@ echo "DB_PASSWORD=password" >> .env
 echo "DB_HOST=localhost" >> .env
 echo "DB_PORT=5432" >> .env
 echo "FFMPEG_PATH=/usr/bin/ffmpeg" >> .env
+
+# and push ENTER
 ```
 
 Deploying the project with <code>docker-compose</code>
